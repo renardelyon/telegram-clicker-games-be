@@ -1,0 +1,10 @@
+[Application]
+ServiceName="article"
+ServiceVersion="1.0.0"
+ServerPort=10018
+
+[ArticleDatabase]
+Host="localhost"
+User="root"
+Password="<password>"
+Database="db_name"
