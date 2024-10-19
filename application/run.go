@@ -3,8 +3,7 @@ package application
 import (
 	"fmt"
 	"telegram-clicker-game-be/config"
-
-	// "telegram-clicker-game-be/pkg"
+	route "telegram-clicker-game-be/routes"
 
 	"github.com/gin-gonic/gin"
 	// "github.com/gin-gonic/gin/binding"
@@ -40,9 +39,9 @@ func runApp(cfg *config.Config, app *Application) error {
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
 
-	// articleDBClient := app.DbClients["article"]
-
-	// route.SetupRouterPostArticle(app.Context, app.Logger, articleDBClient.SqlAdapter, articleDBClient.OrmAdapter, r)
+	if err := route.SetupRouterAuth(app.DbClient, r); err != nil {
+		return err
+	}
 
 	app.Logger.Info("Starting server " + cfg.Application.ServerPort)
 	if err := r.Run(fmt.Sprintf(":%s", cfg.Application.ServerPort)); err != nil {

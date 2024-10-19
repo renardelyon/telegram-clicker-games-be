@@ -11,7 +11,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func NewMongoInstance(cfg *config.Config) (client *mongo.Client, err error) {
+type MongoInterface interface{}
+
+func NewMongoInstance(cfg *config.Config) (coll *mongo.Database, err error) {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	mongoUri := fmt.Sprintf(
 		"mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority&appName=%s",
@@ -25,19 +27,13 @@ func NewMongoInstance(cfg *config.Config) (client *mongo.Client, err error) {
 		SetServerAPIOptions(serverAPI)
 
 	// Create a new client and connect to the server
-	client, err = mongo.Connect(context.TODO(), opts)
+	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		err = error_utils.HandleError(err)
 		return
 	}
 
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			err = error_utils.HandleError(err)
-			return
-		}
-	}()
-
+	coll = client.Database(cfg.ClickerGameDatabase.Database)
 	err = error_utils.HandleError(PingDB(client))
 	return
 }

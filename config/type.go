@@ -13,9 +13,7 @@ type ApplicationConfig struct {
 
 type DBConfig struct {
 	Host     string
-	Port     string
 	User     string
-	Protocol string
 	Password string
 	Database string
 }

@@ -1,5 +1,5 @@
 [Application]
-ServiceName="article"
+ServiceName="telegram-clicker"
 ServiceVersion="1.0.0"
 ServerPort=10018
 
