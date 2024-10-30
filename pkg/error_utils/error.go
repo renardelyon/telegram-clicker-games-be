@@ -3,6 +3,8 @@ package error_utils
 import (
 	"fmt"
 	"runtime"
+
+	"github.com/sirupsen/logrus"
 )
 
 func HandleError(err error) (newErr error) {
@@ -14,4 +16,10 @@ func HandleError(err error) (newErr error) {
 		return fmt.Errorf("[error] in %s[%s:%d] %v", runtime.FuncForPC(pc).Name(), filename, line, err)
 	}
 	return
+}
+
+func HandleErrorLog(trace error, logger *logrus.Logger) {
+	if trace != nil {
+		logger.Error(trace)
+	}
 }

@@ -3,15 +3,16 @@ package repo
 import (
 	"context"
 	"telegram-clicker-game-be/domain/auth/model"
-	"telegram-clicker-game-be/pkg/error_utils"
 	"telegram-clicker-game-be/pkg/utils"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type repo struct {
 	dbMongo *mongo.Database
+	logger  *logrus.Logger
 }
 
 type RepoInterface interface {
@@ -21,12 +22,13 @@ type RepoInterface interface {
 	InserUserData(ctx context.Context, user *model.Users) (err error)
 }
 
-func NewRepo(dbMongo *mongo.Database) (RepoInterface, error) {
+func NewRepo(dbMongo *mongo.Database, logger *logrus.Logger) (RepoInterface, error) {
 	if err := utils.ExpectPointer(dbMongo); err != nil {
-		return nil, error_utils.HandleError(err)
+		return nil, err
 	}
 
 	return &repo{
 		dbMongo: dbMongo,
+		logger:  logger,
 	}, nil
 }

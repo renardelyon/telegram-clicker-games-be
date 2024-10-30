@@ -6,6 +6,8 @@ import (
 	route "telegram-clicker-game-be/routes"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	// "github.com/gin-gonic/gin/binding"
 	// "github.com/go-playground/validator/v10"
 )
@@ -36,10 +38,11 @@ func runApp(cfg *config.Config, app *Application) error {
 
 	r := gin.New()
 	r.Use(CORSMiddleware())
+	r.Use(RequestIDMiddleware(app))
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
 
-	if err := route.SetupRouterAuth(app.DbClient, r); err != nil {
+	if err := route.SetupRouterAuth(app.Logger, app.DbClient, r); err != nil {
 		return err
 	}
 
@@ -63,5 +66,25 @@ func CORSMiddleware() gin.HandlerFunc {
 		}
 
 		c.Next()
+	}
+}
+
+func RequestIDMiddleware(app *Application) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		requestID := c.GetHeader("X-Request-ID")
+		if requestID == "" {
+			requestID = uuid.New().String()
+		}
+
+		c.Set("request_id", requestID)
+
+		// Process the request
+		c.Next()
+
+		app.Logger.WithFields(logrus.Fields{
+			"request_id": requestID,
+			"path":       c.Request.URL.Path,
+		}).
+			Info("Request processed")
 	}
 }

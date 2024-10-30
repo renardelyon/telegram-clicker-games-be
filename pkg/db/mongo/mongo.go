@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"telegram-clicker-game-be/config"
-	"telegram-clicker-game-be/pkg/error_utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,12 +28,11 @@ func NewMongoInstance(cfg *config.Config) (coll *mongo.Database, err error) {
 	// Create a new client and connect to the server
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
-		err = error_utils.HandleError(err)
 		return
 	}
 
 	coll = client.Database(cfg.ClickerGameDatabase.Database)
-	err = error_utils.HandleError(PingDB(client))
+	err = PingDB(client)
 	return
 }
 

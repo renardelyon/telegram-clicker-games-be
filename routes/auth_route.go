@@ -7,20 +7,22 @@ import (
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func SetupRouterAuth(
+	logger *logrus.Logger,
 	dbMongo *mongo.Database,
 	r *gin.Engine) error {
 	// ROUTING
 
-	repo, err := auth_repo.NewRepo(dbMongo)
+	repo, err := auth_repo.NewRepo(dbMongo, logger)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
 
-	usecase, err := auth_usecase.NewUsecase(repo)
+	usecase, err := auth_usecase.NewUsecase(repo, logger)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
