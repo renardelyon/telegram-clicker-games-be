@@ -3,13 +3,12 @@ package application
 import (
 	"fmt"
 	"telegram-clicker-game-be/config"
+	"telegram-clicker-game-be/middleware"
 	route "telegram-clicker-game-be/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
-	// "github.com/gin-gonic/gin/binding"
-	// "github.com/go-playground/validator/v10"
 )
 
 func (app *Application) Run(cfg *config.Config) error {
@@ -32,17 +31,19 @@ func (app *Application) Run(cfg *config.Config) error {
 func runApp(cfg *config.Config, app *Application) error {
 	gin.SetMode(gin.ReleaseMode)
 
-	// if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-	// 	v.RegisterValidation("enum", pkg.ValidateEnum)
-	// }
-
 	r := gin.New()
 	r.Use(CORSMiddleware())
 	r.Use(RequestIDMiddleware(app))
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
 
-	if err := route.SetupRouterAuth(app.Logger, app.DbClient, r); err != nil {
+	if err := middleware.SetupAuthMiddleware(app.Logger, app.DbClient, r); err != nil {
+		return err
+	}
+
+	apiRoute := r.Group("/api")
+
+	if err := route.SetupGameplayRoute(app.Logger, app.DbClient, r, apiRoute); err != nil {
 		return err
 	}
 

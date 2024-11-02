@@ -1,4 +1,4 @@
-package route
+package middleware
 
 import (
 	"telegram-clicker-game-be/domain/auth/handler"
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func SetupRouterAuth(
+func SetupAuthMiddleware(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
 	r *gin.Engine) error {
