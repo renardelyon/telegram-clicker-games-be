@@ -10,7 +10,7 @@ import (
 func (h *handler) ValidateAndBindUserInfo(c *gin.Context) {
 	telData := c.GetHeader("X-init-telegram-data")
 
-	err := h.u.ValidateAndBindUserInfo(c, telData)
+	data, err := h.u.ValidateAndBindUserInfo(c, telData)
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusBadRequest,
@@ -21,6 +21,8 @@ func (h *handler) ValidateAndBindUserInfo(c *gin.Context) {
 		)
 		return
 	}
+
+	c.Set("user_info", &data)
 
 	c.Next()
 }

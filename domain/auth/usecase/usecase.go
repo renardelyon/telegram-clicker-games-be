@@ -6,6 +6,7 @@ import (
 	"telegram-clicker-game-be/pkg/utils"
 
 	"github.com/sirupsen/logrus"
+	initdata "github.com/telegram-mini-apps/init-data-golang"
 )
 
 type usecase struct {
@@ -14,7 +15,7 @@ type usecase struct {
 }
 
 type UsecaseInterface interface {
-	ValidateAndBindUserInfo(ctx context.Context, telData string) error
+	ValidateAndBindUserInfo(ctx context.Context, telData string) (data initdata.InitData, err error)
 }
 
 func NewUsecase(authRepo repo.RepoInterface, logger *logrus.Logger) (UsecaseInterface, error) {

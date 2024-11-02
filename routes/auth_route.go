@@ -30,7 +30,6 @@ func SetupRouterAuth(
 	handler := handler.NewHandler(usecase)
 
 	r.Use(handler.ValidateAndBindUserInfo)
-	r.GET("/", func(ctx *gin.Context) { ctx.JSON(200, map[string]string{"message": "halo"}) })
 
 	return nil
 
