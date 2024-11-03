@@ -26,9 +26,9 @@ func (h *handler) GetLeaderboard(c *gin.Context) {
 	users, err := h.u.GetLeaderboard(c, payload.Limit)
 	if err != nil {
 		c.AbortWithStatusJSON(
-			http.StatusBadRequest,
+			http.StatusInternalServerError,
 			utils.NewResponse(utils.Response{
-				Status:  http.StatusBadRequest,
+				Status:  http.StatusInternalServerError,
 				Message: err.Error(),
 			}),
 		)

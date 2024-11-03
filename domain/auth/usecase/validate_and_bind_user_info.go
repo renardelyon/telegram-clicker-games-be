@@ -97,6 +97,7 @@ func (u *usecase) ValidateAndBindUserInfo(ctx context.Context, telData string) (
 		GameStates: gameState,
 	}
 
+	// TODO upsert
 	err = u.authRepo.InserUserData(ctx, &newUser)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
