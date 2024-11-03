@@ -47,6 +47,10 @@ func runApp(cfg *config.Config, app *Application) error {
 		return err
 	}
 
+	if err := route.SetupLeaderboardRoute(app.Logger, app.DbClient, r, apiRoute); err != nil {
+		return err
+	}
+
 	app.Logger.Info("Starting server " + cfg.Application.ServerPort)
 	if err := r.Run(fmt.Sprintf(":%s", cfg.Application.ServerPort)); err != nil {
 		return err
