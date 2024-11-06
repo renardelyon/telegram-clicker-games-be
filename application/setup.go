@@ -85,11 +85,12 @@ func initLogger() func(*Application) error {
 
 func initDatabase(cfg *config.Config) func(*Application) error {
 	return func(app *Application) error {
-		db, err := lib_mongo.NewMongoInstance(cfg)
+		db, client, err := lib_mongo.NewMongoInstance(cfg)
 		if err != nil {
 			return err
 		}
-		app.DbClient = db
+		app.DBDatabase = db
+		app.DBClient = client
 		return nil
 	}
 }

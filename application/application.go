@@ -8,9 +8,10 @@ import (
 )
 
 type Application struct {
-	Context  context.Context
-	DbClient *mongo.Database
-	Logger   *logrus.Logger
+	Context    context.Context
+	DBClient   *mongo.Client
+	DBDatabase *mongo.Database
+	Logger     *logrus.Logger
 	// MigrationRunner *migration.Runner
 	MigrationFlag string
 	IsMigration   bool

@@ -37,21 +37,25 @@ func runApp(cfg *config.Config, app *Application) error {
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
 
-	if err := middleware.SetupAuthMiddleware(app.Logger, app.DbClient, r); err != nil {
+	if err := middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r); err != nil {
 		return err
 	}
 
 	apiRoute := r.Group("/api")
 
-	if err := route.SetupGameplayRoute(app.Logger, app.DbClient, r, apiRoute); err != nil {
+	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
 		return err
 	}
 
-	if err := route.SetupLeaderboardRoute(app.Logger, app.DbClient, r, apiRoute); err != nil {
+	if err := route.SetupLeaderboardRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
 		return err
 	}
 
-	if err := route.SetupTasksRoute(app.Logger, app.DbClient, r, apiRoute); err != nil {
+	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
+		return err
+	}
+
+	if err := route.SetupReferralRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
 		return err
 	}
 

@@ -95,6 +95,9 @@ func (u *usecase) ValidateAndBindUserInfo(ctx context.Context, telData string) (
 		Upgrades:   upgrades,
 		Tasks:      tasks,
 		GameStates: gameState,
+		Referral: model.Referral{
+			Referrals: []int{},
+		},
 	}
 
 	// TODO upsert

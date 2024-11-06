@@ -12,11 +12,12 @@ type Users struct {
 	FirstName  string             `bson:"first_name"`
 	LastName   string             `bson:"last_name"`
 	UserName   string             `bson:"user_name"`
-	UpdatedAt  time.Time          `bson:"updated_at"`
-	DeletedAt  time.Time          `bson:"deleted_at"`
+	UpdatedAt  *time.Time         `bson:"updated_at"`
+	DeletedAt  *time.Time         `bson:"deleted_at"`
 	CreatedAt  time.Time          `bson:"created_at"`
 	LangCode   string             `bson:"language_code"`
 	IsPremium  bool               `bson:"is_premium"`
+	Referral   Referral           `bson:"referral"`
 	GameStates GameState          `bson:"game_states"`
 	Upgrades   []Upgrade          `bson:"upgrades"`
 	Tasks      []Task             `bson:"tasks"`
@@ -30,6 +31,11 @@ type GameState struct {
 	MaxEnergy        int32     `bson:"max_energy"`
 	LastEnergyUpdate time.Time `bson:"last_energy_update"`
 	MiningRate       float64   `bson:"mining_rate"`
+}
+
+type Referral struct {
+	ReferredBy *int  `bson:"referred_by"` // telegram_id
+	Referrals  []int `bson:"referrals"`
 }
 
 type Upgrade struct {
