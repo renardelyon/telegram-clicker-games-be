@@ -20,7 +20,7 @@ func (u *usecase) BuyUpgrade(ctx context.Context, upgradeId string) (err error) 
 	}).Info("Usecase: BuyUpgrade")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	now := time.Now()
 

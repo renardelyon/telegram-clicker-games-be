@@ -19,7 +19,7 @@ func (r *repo) InserUserData(ctx context.Context, user *model.Users) (err error)
 	coll := r.dbMongo.Collection("Users")
 
 	var errorTrace error
-	defer error_utils.HandleErrorLog(errorTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errorTrace, r.logger)
 
 	_, err = coll.InsertOne(ctx, user)
 	if err != nil {

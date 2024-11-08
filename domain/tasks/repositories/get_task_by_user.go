@@ -17,7 +17,7 @@ func (r *repo) GetTaskByUser(ctx context.Context, userId int) (res []model.TaskD
 	}).Info("Repo: GetTaskByUser")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

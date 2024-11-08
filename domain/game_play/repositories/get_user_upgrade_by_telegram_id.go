@@ -17,7 +17,7 @@ func (r *repo) GetUserUpgradesByTelegramId(ctx context.Context, userId int) (upg
 	}).Info("Repo: GetUserUpgradesByTelegramId")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

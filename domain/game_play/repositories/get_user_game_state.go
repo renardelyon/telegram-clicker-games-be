@@ -17,7 +17,7 @@ func (r *repo) GetUserGameState(ctx context.Context, userId int) (states model.G
 	}).Info("Repo: GetUserGameState")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

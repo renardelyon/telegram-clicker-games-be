@@ -19,7 +19,7 @@ func (u *usecase) SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayloa
 	}).Info("Usecase: SubmitTaps")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 

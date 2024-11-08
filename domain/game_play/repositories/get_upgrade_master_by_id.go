@@ -17,7 +17,7 @@ func (r *repo) GetUpgradeMasterById(ctx context.Context, upgradeId primitive.Obj
 	}).Info("Repo: GetUpgradeMasterById")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Upgrades")
 

@@ -17,7 +17,7 @@ func (r *repo) GetReferralByUserId(ctx context.Context, userId int) (res model.R
 	}).Info("Repo: GetReferralByUserId")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

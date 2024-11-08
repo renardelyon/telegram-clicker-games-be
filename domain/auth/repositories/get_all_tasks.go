@@ -19,7 +19,7 @@ func (r *repo) GetAllTasks(ctx context.Context) (result []model.TaskMaster, err 
 		Info("Repo: GetAllTasks")
 
 	var errorTrace error
-	defer error_utils.HandleErrorLog(errorTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errorTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Tasks")
 

@@ -15,7 +15,7 @@ func (u *usecase) GetTasksByUser(ctx context.Context) (res []model.TaskData, err
 	}).Info("Usecase: GetTasksByUser")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 

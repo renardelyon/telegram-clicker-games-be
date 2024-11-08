@@ -17,7 +17,7 @@ func (r *repo) GetUpgradeMasterByEffect(ctx context.Context, effect string) (upg
 	}).Info("Repo: GetUpgradeByEffect")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Upgrades")
 

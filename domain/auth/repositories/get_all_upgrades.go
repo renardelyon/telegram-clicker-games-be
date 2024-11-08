@@ -19,7 +19,7 @@ func (r *repo) GetAllUpgrades(ctx context.Context) (result []model.UpgradeMaster
 		Info("Repo: GetAllUpgrades")
 
 	var errorTrace error
-	defer error_utils.HandleErrorLog(errorTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errorTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Upgrades")
 

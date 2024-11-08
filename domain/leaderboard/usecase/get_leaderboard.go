@@ -16,7 +16,7 @@ func (u *usecase) GetLeaderboard(ctx context.Context, limit int) (res []model.Us
 	}).Info("Usecase: GetLeaderboard")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	// TODO: Caching
 

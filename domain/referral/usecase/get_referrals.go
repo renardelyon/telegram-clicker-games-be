@@ -16,7 +16,7 @@ func (u *usecase) GetReferrals(ctx context.Context) (res []model.User, err error
 	}).Info("Usecase: GetReferrals")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 

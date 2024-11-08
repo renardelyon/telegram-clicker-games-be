@@ -18,7 +18,7 @@ func (r *repo) UpdateBalanceGameState(ctx context.Context, userId int, state mod
 	}).Info("Repo: UpdateBalanceGameState")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

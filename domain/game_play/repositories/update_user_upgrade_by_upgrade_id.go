@@ -23,7 +23,7 @@ func (r *repo) UpdateUserUpgradeByUpgradeId(
 	}).Info("Repo: UpdateUserUpgradeByUpgradeId")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

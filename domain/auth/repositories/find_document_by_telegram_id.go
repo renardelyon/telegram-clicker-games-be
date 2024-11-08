@@ -17,7 +17,7 @@ func (r *repo) FindDocumentByTelegrarmId(ctx context.Context, telegramId int64) 
 		Info("Repo: FindDocumentByTelegrarmId")
 
 	var errorTrace error
-	defer error_utils.HandleErrorLog(errorTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errorTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

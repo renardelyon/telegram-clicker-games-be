@@ -18,8 +18,8 @@ func HandleError(err error) (newErr error) {
 	return
 }
 
-func HandleErrorLog(trace error, logger *logrus.Logger) {
-	if trace != nil {
-		logger.Error(trace)
+func HandleErrorLog(trace *error, logger *logrus.Logger) {
+	if trace != nil && *trace != nil {
+		logger.Error(*trace)
 	}
 }

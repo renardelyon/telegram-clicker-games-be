@@ -19,7 +19,7 @@ func (r *repo) GetUserWithLimit(ctx context.Context, limit int, order int) (res 
 	}).Info("Repo: GetUserWithLimit")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

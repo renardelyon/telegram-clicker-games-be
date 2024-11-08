@@ -15,10 +15,11 @@ func (r *repo) GetUserUpgradeByUpgradeId(ctx context.Context, userId int, upgrad
 	r.logger.WithFields(logrus.Fields{
 		"request_id": ctx.Value("request_id"),
 		"userId":     userId,
+		"upgradeId":  upgradeId,
 	}).Info("Repo: GetUserUpgradeByUserId")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 

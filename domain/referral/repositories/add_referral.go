@@ -17,7 +17,7 @@ func (r *repo) AddReferral(ctx context.Context, userId int, referrerId int) (err
 	}).Info("Repo: AddReferral")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	now := time.Now()
 

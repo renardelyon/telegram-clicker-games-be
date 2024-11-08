@@ -19,7 +19,7 @@ func (u *usecase) AddReferrals(ctx context.Context, referred_by int) (err error)
 	}).Info("Usecase: AddReferrals")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, u.logger)
+	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 

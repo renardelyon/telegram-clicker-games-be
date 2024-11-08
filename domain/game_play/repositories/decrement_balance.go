@@ -17,7 +17,7 @@ func (r *repo) DecrementBalance(ctx context.Context, userId int, value float64) 
 	}).Info("Repo: DecrementBalance")
 
 	var errTrace error
-	defer error_utils.HandleErrorLog(errTrace, r.logger)
+	defer error_utils.HandleErrorLog(&errTrace, r.logger)
 
 	coll := r.dbMongo.Collection("Users")
 
