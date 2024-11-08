@@ -43,7 +43,7 @@ func runApp(cfg *config.Config, app *Application) error {
 
 	apiRoute := r.Group("/api")
 
-	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
+	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
 		return err
 	}
 

@@ -30,6 +30,7 @@ func (u *usecase) AddReferrals(ctx context.Context, referred_by int) (err error)
 	session, err := u.dbClient.StartSession()
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
+		return
 	}
 	// Defers ending the session after the transaction is committed or ended
 	defer session.EndSession(ctx)
@@ -51,6 +52,7 @@ func (u *usecase) AddReferrals(ctx context.Context, referred_by int) (err error)
 	_, err = session.WithTransaction(ctx, operation, txnOptions)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
+		return
 	}
 
 	return

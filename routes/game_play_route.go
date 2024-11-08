@@ -14,6 +14,7 @@ import (
 func SetupGameplayRoute(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
+	dbClient *mongo.Client,
 	r *gin.Engine,
 	apiRoute *gin.RouterGroup) error {
 	// ROUTING
@@ -23,7 +24,7 @@ func SetupGameplayRoute(
 		return error_utils.HandleError(err)
 	}
 
-	usecase, err := gameplay_usecase.NewUsecase(repo, logger)
+	usecase, err := gameplay_usecase.NewUsecase(repo, logger, dbClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
@@ -33,6 +34,7 @@ func SetupGameplayRoute(
 	v1 := apiRoute.Group("/v1")
 	{
 		v1.PUT("/submit-taps", handler.SubmitTaps)
+		v1.PUT("/buy-upgrade", handler.BuyUpgrade)
 	}
 
 	return nil

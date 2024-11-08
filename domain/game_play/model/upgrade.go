@@ -7,11 +7,12 @@ import (
 )
 
 type UpgradeMaster struct {
-	Id          primitive.ObjectID `bson:"_id,omitempty"`
-	MaxLevel    int32              `bson:"max_level"`
-	BaseCost    float64            `bson:"base_cost"`
-	Description string             `bson:"description"`
-	Effect      string             `bson:"effect"`
+	Id            primitive.ObjectID `bson:"_id,omitempty"`
+	MaxLevel      int32              `bson:"max_level"`
+	BaseCost      float64            `bson:"base_cost"`
+	Description   string             `bson:"description"`
+	Effect        string             `bson:"effect"`
+	IncMultiplier float64            `bson:"inc_multiplier"`
 }
 
 type Upgrade struct {

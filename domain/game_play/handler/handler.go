@@ -12,6 +12,7 @@ type handler struct {
 
 type Handler interface {
 	SubmitTaps(c *gin.Context)
+	BuyUpgrade(c *gin.Context)
 }
 
 func NewHandler(usecase usecase.UsecaseInterface) Handler {

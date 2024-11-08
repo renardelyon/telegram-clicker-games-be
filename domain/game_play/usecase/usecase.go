@@ -7,18 +7,21 @@ import (
 	"telegram-clicker-game-be/pkg/utils"
 
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type usecase struct {
 	gameplayRepo gameplay_repo.RepoInterface
 	logger       *logrus.Logger
+	dbClient     *mongo.Client
 }
 
 type UsecaseInterface interface {
 	SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayload) error
+	BuyUpgrade(ctx context.Context, upgradeId string) (err error)
 }
 
-func NewUsecase(gameplayRepo gameplay_repo.RepoInterface, logger *logrus.Logger) (UsecaseInterface, error) {
+func NewUsecase(gameplayRepo gameplay_repo.RepoInterface, logger *logrus.Logger, dbClient *mongo.Client) (UsecaseInterface, error) {
 	if err := utils.ExpectPointer(gameplayRepo); err != nil {
 		return nil, err
 	}
@@ -26,5 +29,6 @@ func NewUsecase(gameplayRepo gameplay_repo.RepoInterface, logger *logrus.Logger)
 	return &usecase{
 		gameplayRepo: gameplayRepo,
 		logger:       logger,
+		dbClient:     dbClient,
 	}, nil
 }
