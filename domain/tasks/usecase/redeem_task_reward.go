@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"telegram-clicker-game-be/constant"
 	"telegram-clicker-game-be/pkg/error_utils"
 	"time"
 
@@ -13,58 +15,68 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 )
 
-func (u *usecase) BuyUpgrade(ctx context.Context, upgradeId string) (err error) {
+func (u *usecase) RedeemTaskReward(ctx context.Context, taskId string, status constant.TaskStatus) (err error) {
 	u.logger.WithFields(logrus.Fields{
 		"request_id": ctx.Value("request_id"),
-		"upgradeId":  upgradeId,
-	}).Info("Usecase: BuyUpgrade")
+		"task_id":    taskId,
+	}).Info("Usecase: RedeemTaskReward")
+
+	now := time.Now()
 
 	var errTrace error
 	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
-	now := time.Now()
-
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 
-	uId, err := primitive.ObjectIDFromHex(upgradeId)
+	tId, err := primitive.ObjectIDFromHex(taskId)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
 		return
 	}
 
-	// Get Upgrades
-	upgrade, err := u.gameplayRepo.GetUserUpgradeByUpgradeId(ctx, int(userInfo.ID), uId)
+	// Get Task Master
+	tm, err := u.taskRepo.GetTaskMasterById(ctx, tId)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
 		return
 	}
 
-	// Get UpgradeMaster
-	upgradeMaster, err := u.gameplayRepo.GetUpgradeMasterById(ctx, uId)
+	// Get User Task
+	ut, err := u.taskRepo.GetUserTaskById(ctx, int(userInfo.ID), tId)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
 		return
 	}
 
-	/**
-	    - Change Next Cost to NC = BaseCost * inc_multiplier * Level
-	    - Increment Level
-	    - Update acquired_at
-	**/
-	upgrade.AcquiredAt = now
-	upgrade.NextCost = upgradeMaster.BaseCost * upgradeMaster.IncMultiplier * float64(upgrade.Level)
-	upgrade.Level += 1
+	if !status.IsValid() {
+		err = errors.New("task status doesn't exist")
+		errTrace = error_utils.HandleError(err)
+		return
+	}
+
+	ut.Status = string(status)
+	ut.LastUpdated = now
+
+	// Get User Game State
+	gs, err := u.gameplayRepo.GetUserGameState(ctx, int(userInfo.ID))
+	if err != nil {
+		errTrace = error_utils.HandleError(err)
+		return
+	}
+
+	gs.Balance += float64(tm.RewardAmount)
+	gs.TotalBalance += float64(tm.RewardAmount)
 
 	operation := func(mctx mongo.SessionContext) (res interface{}, err error) {
-		// Decrement Balance
-		// If Balance Less than 0 throw error
-		err = u.gameplayRepo.DecrementBalance(mctx, int(userInfo.ID), upgrade.NextCost)
+		// Update Balance and total balance from from reward amount
+		err = u.gameplayRepo.UpdateBalanceGameState(mctx, int(userInfo.ID), gs)
 		if err != nil {
 			errTrace = error_utils.HandleError(err)
 			return
 		}
 
-		err = u.gameplayRepo.UpdateUserUpgradeByUpgradeId(mctx, int(userInfo.ID), &upgrade)
+		// Update task status and last_updated
+		err = u.taskRepo.UpdateUserTask(mctx, int(userInfo.ID), &ut)
 		if err != nil {
 			errTrace = error_utils.HandleError(err)
 			return

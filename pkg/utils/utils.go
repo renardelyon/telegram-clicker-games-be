@@ -6,11 +6,12 @@ import (
 )
 
 // Function that expects a pointer type
-func ExpectPointer(v interface{}) error {
+func ExpectPointer(vs ...interface{}) error {
 	// Use reflection to check if v is a pointer
-	if reflect.ValueOf(v).Kind() != reflect.Ptr {
-		return errors.New("expected a pointer")
+	for _, v := range vs {
+		if reflect.ValueOf(v).Kind() != reflect.Ptr {
+			return errors.New("expected a pointer")
+		}
 	}
-
 	return nil
 }

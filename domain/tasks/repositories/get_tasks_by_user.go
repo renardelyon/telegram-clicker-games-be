@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (r *repo) GetTaskByUser(ctx context.Context, userId int) (res []model.TaskData, err error) {
+func (r *repo) GetTasksByUser(ctx context.Context, userId int) (res []model.TaskData, err error) {
 	r.logger.WithFields(logrus.Fields{
 		"request_id":  ctx.Value("request_id"),
 		"telegram_id": userId,

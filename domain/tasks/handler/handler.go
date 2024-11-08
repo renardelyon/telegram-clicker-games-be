@@ -12,6 +12,7 @@ type handler struct {
 
 type Handler interface {
 	GetTasksByUser(c *gin.Context)
+	RedeemTaskReward(c *gin.Context)
 }
 
 func NewHandler(usecase usecase.UsecaseInterface) Handler {

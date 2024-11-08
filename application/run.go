@@ -51,7 +51,7 @@ func runApp(cfg *config.Config, app *Application) error {
 		return err
 	}
 
-	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
+	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
 		return err
 	}
 

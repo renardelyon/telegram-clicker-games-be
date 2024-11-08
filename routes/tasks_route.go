@@ -1,6 +1,7 @@
 package route
 
 import (
+	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
 	tasks_handler "telegram-clicker-game-be/domain/tasks/handler"
 	tasks_repo "telegram-clicker-game-be/domain/tasks/repositories"
 	tasks_usecase "telegram-clicker-game-be/domain/tasks/usecase"
@@ -14,6 +15,7 @@ import (
 func SetupTasksRoute(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
+	dbClient *mongo.Client,
 	r *gin.Engine,
 	apiRoute *gin.RouterGroup) error {
 	// ROUTING
@@ -23,7 +25,12 @@ func SetupTasksRoute(
 		return error_utils.HandleError(err)
 	}
 
-	usecase, err := tasks_usecase.NewUsecase(repo, logger)
+	gRepo, err := gameplay_repo.NewRepo(dbMongo, logger)
+	if err != nil {
+		return error_utils.HandleError(err)
+	}
+
+	usecase, err := tasks_usecase.NewUsecase(repo, logger, gRepo, dbClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
@@ -33,6 +40,7 @@ func SetupTasksRoute(
 	v1 := apiRoute.Group("/v1")
 	{
 		v1.GET("/tasks", handler.GetTasksByUser)
+		v1.PUT("/redeem-task", handler.RedeemTaskReward)
 	}
 
 	return nil

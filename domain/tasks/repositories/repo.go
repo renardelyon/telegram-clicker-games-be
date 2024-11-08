@@ -6,6 +6,7 @@ import (
 	"telegram-clicker-game-be/pkg/utils"
 
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -15,7 +16,10 @@ type repo struct {
 }
 
 type RepoInterface interface {
-	GetTaskByUser(ctx context.Context, userId int) (res []model.TaskData, err error)
+	GetTasksByUser(ctx context.Context, userId int) (res []model.TaskData, err error)
+	GetTaskMasterById(ctx context.Context, taskId primitive.ObjectID) (taskMaster model.TaskMaster, err error)
+	UpdateUserTask(ctx context.Context, userId int, task *model.Task) (err error)
+	GetUserTaskById(ctx context.Context, userId int, taskId primitive.ObjectID) (task model.Task, err error)
 }
 
 func NewRepo(dbMongo *mongo.Database, logger *logrus.Logger) (RepoInterface, error) {

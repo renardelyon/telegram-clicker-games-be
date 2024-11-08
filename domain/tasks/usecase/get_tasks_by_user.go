@@ -19,7 +19,7 @@ func (u *usecase) GetTasksByUser(ctx context.Context) (res []model.TaskData, err
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
 
-	res, err = u.taskRepo.GetTaskByUser(ctx, int(userInfo.ID))
+	res, err = u.taskRepo.GetTasksByUser(ctx, int(userInfo.ID))
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
 		return
