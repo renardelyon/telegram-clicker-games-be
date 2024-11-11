@@ -35,6 +35,7 @@ func SetupGameplayRoute(
 	{
 		v1.PUT("/submit-taps", handler.SubmitTaps)
 		v1.PUT("/buy-upgrade", handler.BuyUpgrade)
+		v1.GET("/upgrades", handler.GetTasksByUser)
 	}
 
 	return nil

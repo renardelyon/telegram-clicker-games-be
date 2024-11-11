@@ -21,3 +21,8 @@ type Upgrade struct {
 	Level      int32              `bson:"level"`
 	AcquiredAt time.Time          `bson:"acquired_at"`
 }
+
+type UpgradeData struct {
+	Upgrade       Upgrade       `bson:"upgrades" json:"upgrade"`
+	UpgradeDetail UpgradeMaster `bson:"upgrade_detail" json:"upgrade_detail"`
+}

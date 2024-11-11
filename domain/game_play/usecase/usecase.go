@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"telegram-clicker-game-be/domain/game_play/model"
 	"telegram-clicker-game-be/domain/game_play/payload"
 	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
 	"telegram-clicker-game-be/pkg/utils"
@@ -19,6 +20,7 @@ type usecase struct {
 type UsecaseInterface interface {
 	SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayload) error
 	BuyUpgrade(ctx context.Context, upgradeId string) (err error)
+	GetUpgrades(ctx context.Context) (upgrades []model.UpgradeData, err error)
 }
 
 func NewUsecase(gameplayRepo gameplay_repo.RepoInterface, logger *logrus.Logger, dbClient *mongo.Client) (UsecaseInterface, error) {

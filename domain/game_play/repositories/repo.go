@@ -24,6 +24,7 @@ type RepoInterface interface {
 	GetUpgradeMasterById(ctx context.Context, upgradeId primitive.ObjectID) (upgradeMaster model.UpgradeMaster, err error)
 	GetUserUpgradeByUpgradeId(ctx context.Context, userId int, upgradeId primitive.ObjectID) (upgrade model.Upgrade, err error)
 	UpdateUserUpgradeByUpgradeId(ctx context.Context, userId int, upgrade *model.Upgrade) (err error)
+	GetUpgradesByUser(ctx context.Context, userId int) (res []model.UpgradeData, err error)
 }
 
 func NewRepo(dbMongo *mongo.Database, logger *logrus.Logger) (RepoInterface, error) {
