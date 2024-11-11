@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"telegram-clicker-game-be/domain/auth/handler"
-	auth_repo "telegram-clicker-game-be/domain/auth/repositories"
-	auth_usecase "telegram-clicker-game-be/domain/auth/usecase"
+	"telegram-clicker-game-be/domain/auth-user/handler"
+	auth_repo "telegram-clicker-game-be/domain/auth-user/repositories"
+	auth_usecase "telegram-clicker-game-be/domain/auth-user/usecase"
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/gin-gonic/gin"

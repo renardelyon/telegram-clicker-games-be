@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"telegram-clicker-game-be/domain/auth/usecase"
+	"telegram-clicker-game-be/domain/auth-user/usecase"
 
 	"github.com/gin-gonic/gin"
 )

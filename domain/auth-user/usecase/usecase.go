@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	repo "telegram-clicker-game-be/domain/auth/repositories"
+	repo "telegram-clicker-game-be/domain/auth-user/repositories"
 	"telegram-clicker-game-be/pkg/utils"
 
 	"github.com/sirupsen/logrus"

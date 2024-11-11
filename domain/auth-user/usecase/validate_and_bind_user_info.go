@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"telegram-clicker-game-be/constant"
-	"telegram-clicker-game-be/domain/auth/model"
+	"telegram-clicker-game-be/domain/auth-user/model"
 	"telegram-clicker-game-be/pkg/error_utils"
 	"time"
 

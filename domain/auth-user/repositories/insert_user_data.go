@@ -3,7 +3,7 @@ package repo
 import (
 	"context"
 	"fmt"
-	"telegram-clicker-game-be/domain/auth/model"
+	"telegram-clicker-game-be/domain/auth-user/model"
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/sirupsen/logrus"
