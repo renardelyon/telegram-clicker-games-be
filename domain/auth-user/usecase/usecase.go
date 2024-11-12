@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"telegram-clicker-game-be/domain/auth-user/model"
 	repo "telegram-clicker-game-be/domain/auth-user/repositories"
 	"telegram-clicker-game-be/pkg/utils"
 
@@ -16,6 +17,7 @@ type usecase struct {
 
 type UsecaseInterface interface {
 	ValidateAndBindUserInfo(ctx context.Context, telData string) (data initdata.InitData, err error)
+	GetUserById(ctx context.Context) (users model.Users, err error)
 }
 
 func NewUsecase(authRepo repo.RepoInterface, logger *logrus.Logger) (UsecaseInterface, error) {

@@ -20,6 +20,7 @@ type RepoInterface interface {
 	GetAllUpgrades(ctx context.Context) (result []model.UpgradeMaster, err error)
 	GetAllTasks(ctx context.Context) (result []model.TaskMaster, err error)
 	InserUserData(ctx context.Context, user *model.Users) (err error)
+	GetUserById(ctx context.Context, userId int) (result model.Users, err error)
 }
 
 func NewRepo(dbMongo *mongo.Database, logger *logrus.Logger) (RepoInterface, error) {

@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func SetupRouterAuth(
+func SetupAuthMiddleware(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
 	r *gin.Engine) error {
@@ -32,4 +32,5 @@ func SetupRouterAuth(
 	r.Use(handler.ValidateAndBindUserInfo)
 
 	return nil
+
 }
