@@ -33,7 +33,7 @@ func SetupAuthRoute(
 
 	v1 := apiRoute.Group("/v1")
 	{
-		v1.GET("/user", handler.GetUserById)
+		v1.GET("/profile", handler.GetUserById)
 	}
 
 	return nil
