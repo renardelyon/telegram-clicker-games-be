@@ -13,6 +13,7 @@ type handler struct {
 type Handler interface {
 	ValidateAndBindUserInfo(c *gin.Context)
 	GetUserById(c *gin.Context)
+	SignIn(c *gin.Context)
 }
 
 func NewHandler(usecase usecase.UsecaseInterface) Handler {

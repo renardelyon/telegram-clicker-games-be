@@ -18,6 +18,7 @@ type usecase struct {
 type UsecaseInterface interface {
 	ValidateAndBindUserInfo(ctx context.Context, telData string) (data initdata.InitData, err error)
 	GetUserById(ctx context.Context) (users model.Users, err error)
+	UpsertUser(ctx context.Context) (err error)
 }
 
 func NewUsecase(authRepo repo.RepoInterface, logger *logrus.Logger) (UsecaseInterface, error) {

@@ -2,13 +2,14 @@ package repo
 
 import (
 	"context"
+	"telegram-clicker-game-be/domain/auth-user/model"
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (r *repo) FindDocumentByTelegrarmId(ctx context.Context, telegramId int64) (result bson.M, err error) {
+func (r *repo) FindDocumentByTelegrarmId(ctx context.Context, telegramId int64) (result model.Users, err error) {
 	r.logger.WithContext(ctx).
 		WithFields(logrus.Fields{
 			"telegram_id": telegramId,
