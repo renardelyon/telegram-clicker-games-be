@@ -12,6 +12,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+const (
+	DEFAULT_ENERGY = 500
+)
+
 func (u *usecase) UpsertUser(ctx context.Context) (err error) {
 	u.logger.WithFields(logrus.Fields{
 		"request_id": ctx.Value("request_id"),
@@ -90,6 +94,13 @@ func (u *usecase) UpsertUser(ctx context.Context) (err error) {
 
 		return res.CreatedAt
 	}()
+	if err == mongo.ErrNoDocuments {
+		res.GameStates = model.GameState{
+			Energy:           DEFAULT_ENERGY,
+			BaseEnergy:       DEFAULT_ENERGY,
+			LastEnergyUpdate: time.Now(),
+		}
+	}
 
 	err = u.authRepo.UpsertUserData(ctx, &res)
 	if err != nil {

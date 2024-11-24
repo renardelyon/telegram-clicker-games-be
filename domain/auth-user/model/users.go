@@ -28,7 +28,7 @@ type GameState struct {
 	Balance          float64   `bson:"balance" json:"balance"`
 	TotalBalance     float64   `bson:"total_balance" json:"total_balance"`
 	Energy           int32     `bson:"energy" json:"energy"`
-	MaxEnergy        int32     `bson:"max_energy" json:"max_energy"`
+	BaseEnergy       int32     `bson:"base_energy" json:"base_energy"`
 	LastEnergyUpdate time.Time `bson:"last_energy_update" json:"last_energy_update"`
 	MiningRate       float64   `bson:"mining_rate" json:"mining_rate"`
 }
