@@ -33,8 +33,9 @@ func SetupAuthRoute(
 
 	v1 := apiRoute.Group("/v1")
 	{
-		v1.GET("/profile", handler.GetUserById)
-		v1.POST("/sign-in", handler.SignIn)
+		authGroup := v1.Group("/auth")
+		authGroup.GET("/profile", handler.GetUserById)
+		authGroup.POST("/sign-in", handler.SignIn)
 	}
 
 	return nil

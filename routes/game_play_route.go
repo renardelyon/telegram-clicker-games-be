@@ -33,9 +33,10 @@ func SetupGameplayRoute(
 
 	v1 := apiRoute.Group("/v1")
 	{
-		v1.PUT("/submit-taps", handler.SubmitTaps)
-		v1.PUT("/buy-upgrade", handler.BuyUpgrade)
-		v1.GET("/upgrades", handler.GetTasksByUser)
+		gameplay := v1.Group("/gameplay")
+		gameplay.PUT("/submit-taps", handler.SubmitTaps)
+		gameplay.PUT("/buy-upgrade", handler.BuyUpgrade)
+		gameplay.GET("/upgrades", handler.GetTasksByUser)
 	}
 
 	return nil

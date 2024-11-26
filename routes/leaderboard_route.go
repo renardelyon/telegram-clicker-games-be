@@ -32,7 +32,8 @@ func SetupLeaderboardRoute(
 
 	v1 := apiRoute.Group("/v1")
 	{
-		v1.GET("/leaderboard", handler.GetLeaderboard)
+		leaderboardGroup := v1.Group("/leaderboard")
+		leaderboardGroup.GET("/", handler.GetLeaderboard)
 	}
 
 	return nil

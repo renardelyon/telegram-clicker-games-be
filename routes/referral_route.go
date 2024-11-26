@@ -33,8 +33,9 @@ func SetupReferralRoute(
 
 	v1 := apiRoute.Group("/v1")
 	{
-		v1.GET("/referral", handler.GetReferrals)
-		v1.POST("/referral", handler.AddReferrals)
+		referralRoute := v1.Group("/referral")
+		referralRoute.GET("/", handler.GetReferrals)
+		referralRoute.POST("/", handler.AddReferrals)
 	}
 
 	return nil
