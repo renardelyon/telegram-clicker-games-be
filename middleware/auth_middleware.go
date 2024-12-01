@@ -4,6 +4,7 @@ import (
 	"telegram-clicker-game-be/domain/auth-user/handler"
 	auth_repo "telegram-clicker-game-be/domain/auth-user/repositories"
 	auth_usecase "telegram-clicker-game-be/domain/auth-user/usecase"
+	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/gin-gonic/gin"
@@ -17,12 +18,17 @@ func SetupAuthMiddleware(
 	r *gin.Engine) error {
 	// ROUTING
 
-	repo, err := auth_repo.NewRepo(dbMongo, logger)
+	authRepo, err := auth_repo.NewRepo(dbMongo, logger)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
 
-	usecase, err := auth_usecase.NewUsecase(repo, logger)
+	gameplayRepo, err := gameplay_repo.NewRepo(dbMongo, logger)
+	if err != nil {
+		return error_utils.HandleError(err)
+	}
+
+	usecase, err := auth_usecase.NewUsecase(authRepo, gameplayRepo, logger)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

@@ -2,11 +2,8 @@ package usecase
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"telegram-clicker-game-be/constant"
 	gameplay_model "telegram-clicker-game-be/domain/game_play/model"
-	"telegram-clicker-game-be/domain/game_play/payload"
 	"telegram-clicker-game-be/pkg/error_utils"
 	"time"
 
@@ -14,22 +11,15 @@ import (
 	initdata "github.com/telegram-mini-apps/init-data-golang"
 )
 
-func (u *usecase) SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayload) (err error) {
+func (u *usecase) UpdateEnergyBasedOnTime(ctx context.Context) (err error) {
 	u.logger.WithFields(logrus.Fields{
 		"request_id": ctx.Value("request_id"),
-		"data":       fmt.Sprintf("%+v", taps),
-	}).Info("Usecase: SubmitTaps")
+	}).Info("Usecase: GetUserById")
 
 	var errTrace error
 	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
-
-	multiTapUpgradeMaster, err := u.gameplayRepo.GetUpgradeMasterByEffect(ctx, constant.MULTI_TAP)
-	if err != nil {
-		errTrace = error_utils.HandleError(err)
-		return
-	}
 
 	energyRechargeUpgradeMaster, err := u.gameplayRepo.GetUpgradeMasterByEffect(ctx, constant.ENERGY_RECHARGE)
 	if err != nil {
@@ -50,16 +40,12 @@ func (u *usecase) SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayloa
 	}
 
 	var (
-		multiTapUpgrade       gameplay_model.Upgrade
 		energyRechargeUpgrade gameplay_model.Upgrade
 		energyLimitUpgrade    gameplay_model.Upgrade
 	)
 
 	for _, up := range upgrades {
 		switch up.UpgradeId {
-		case multiTapUpgradeMaster.Id:
-			multiTapUpgrade = up
-			break
 		case energyRechargeUpgradeMaster.Id:
 			energyRechargeUpgrade = up
 			break
@@ -77,18 +63,9 @@ func (u *usecase) SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayloa
 		return
 	}
 
-	// Adjust energy based on recharge and consumption
-	updatedEnergy, err := u.calculateEnergy(&gameStates, taps, &multiTapUpgrade, &energyRechargeUpgrade, &energyLimitUpgrade)
-	if err != nil {
-		errTrace = error_utils.HandleError(err)
-		return
-	}
+	newEnergy := u.calculateEnergyBasedOnNow(&gameStates, &energyRechargeUpgrade, &energyLimitUpgrade)
 
-	// update game states struct
-	gameStates.Balance += float64(multiTapUpgrade.Level) * float64(taps.Taps)
-	gameStates.ClickCount += int64(taps.Taps)
-	gameStates.TotalBalance += float64(multiTapUpgrade.Level) * float64(taps.Taps)
-	gameStates.Energy = updatedEnergy
+	gameStates.Energy = newEnergy
 	gameStates.LastEnergyUpdate = time.Now()
 
 	err = u.gameplayRepo.UpdateBalanceGameState(ctx, int(userInfo.ID), gameStates)
@@ -97,17 +74,15 @@ func (u *usecase) SubmitTaps(ctx context.Context, taps *payload.SubmitTapsPayloa
 		return
 	}
 
-	return nil
+	return
 }
 
-func (u *usecase) calculateEnergy(
+func (u *usecase) calculateEnergyBasedOnNow(
 	gameStates *gameplay_model.GameState,
-	taps *payload.SubmitTapsPayload,
-	multiTapUpgrade *gameplay_model.Upgrade,
 	energyRechargeUpgrade *gameplay_model.Upgrade,
 	energyLimitUpgrade *gameplay_model.Upgrade,
-) (res int32, err error) {
-	energyDiff := int32(taps.Time.ConvertToGoTime().Sub(gameStates.LastEnergyUpdate).Seconds()) *
+) (res int32) {
+	energyDiff := int32(time.Now().Sub(gameStates.LastEnergyUpdate).Seconds()) *
 		energyRechargeUpgrade.Level
 
 	newEnergy := func() int32 {
@@ -120,11 +95,5 @@ func (u *usecase) calculateEnergy(
 		return energyTotal
 	}()
 
-	res = newEnergy - int32(taps.Taps)*multiTapUpgrade.Level
-
-	if res < 0 {
-		return res, errors.New("energy is less than zero, cannot increment taps anymore")
-	}
-
-	return
+	return newEnergy
 }
