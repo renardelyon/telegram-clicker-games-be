@@ -40,7 +40,7 @@ func SetupTasksRoute(
 	v1 := apiRoute.Group("/v1")
 	{
 		taskRoute := v1.Group("/tasks")
-		taskRoute.GET("/", handler.GetTasksByUser)
+		taskRoute.GET("/list", handler.GetTasksByUser)
 		taskRoute.PUT("/redeem", handler.RedeemTaskReward)
 	}
 

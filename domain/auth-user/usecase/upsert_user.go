@@ -78,6 +78,7 @@ func (u *usecase) UpsertUser(ctx context.Context) (err error) {
 	res.UserName = userInfo.Username
 	res.LangCode = userInfo.LanguageCode
 	res.IsPremium = userInfo.IsPremium
+	res.PhotoUrl = userInfo.PhotoURL
 	res.Upgrades = upgrades
 	res.Tasks = tasks
 	res.Referral.Referrals = func() []int {

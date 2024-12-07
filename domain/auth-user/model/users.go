@@ -12,6 +12,7 @@ type Users struct {
 	FirstName  string             `bson:"first_name" json:"first_name"`
 	LastName   string             `bson:"last_name" json:"last_name"`
 	UserName   string             `bson:"user_name" json:"user_name"`
+	PhotoUrl   string             `bson:"photo_url" json:"photo_url"`
 	UpdatedAt  *time.Time         `bson:"updated_at" json:"updated_at"`
 	DeletedAt  *time.Time         `bson:"deleted_at" json:"deleted_at"`
 	CreatedAt  time.Time          `bson:"created_at" json:"created_at"`
