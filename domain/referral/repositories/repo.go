@@ -20,6 +20,7 @@ type RepoInterface interface {
 	GetUserByReferralUserId(ctx context.Context, userIds ...int) (res []model.User, err error)
 	AddReferredBy(ctx context.Context, userId int, referrerId int) (err error)
 	AddReferral(ctx context.Context, userId int, referrerId int) (err error)
+	CheckReferralExist(ctx context.Context, userId int, referrerId int) (res bool, err error)
 }
 
 func NewRepo(dbMongo *mongo.Database, logger *logrus.Logger) (RepoInterface, error) {

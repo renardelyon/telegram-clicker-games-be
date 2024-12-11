@@ -18,10 +18,21 @@ func (u *usecase) AddReferrals(ctx context.Context, referred_by int) (err error)
 		"referred_by": referred_by,
 	}).Info("Usecase: AddReferrals")
 
+	//TODO give user reward
+
 	var errTrace error
 	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
 	userInfo := ctx.Value("user_info").(*initdata.InitData).User
+
+	isExist, err := u.referralRepo.CheckReferralExist(ctx, int(userInfo.ID), referred_by)
+	if err != nil {
+		errTrace = error_utils.HandleError(err)
+		return
+	}
+	if isExist {
+		return
+	}
 
 	wc := writeconcern.Majority()
 	txnOptions := options.Transaction().SetWriteConcern(wc)

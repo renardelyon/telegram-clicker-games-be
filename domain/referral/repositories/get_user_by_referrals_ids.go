@@ -24,11 +24,13 @@ func (r *repo) GetUserByReferralUserId(ctx context.Context, userIds ...int) (res
 	filter := bson.M{"telegram_id": bson.M{"$in": userIds}}
 
 	projection := options.Find().SetProjection(bson.M{
-		"_id":         1,
-		"telegram_id": 1,
-		"first_name":  1,
-		"last_name":   1,
-		"user_name":   1,
+		"_id":                       1,
+		"telegram_id":               1,
+		"first_name":                1,
+		"last_name":                 1,
+		"user_name":                 1,
+		"photo_url":                 1,
+		"game_states.total_balance": 1,
 	})
 
 	cursor, err := coll.Find(ctx, filter, projection)
