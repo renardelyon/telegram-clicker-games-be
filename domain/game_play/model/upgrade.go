@@ -8,6 +8,7 @@ import (
 
 type UpgradeMaster struct {
 	Id            primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	Name          string             `bson:"name" json:"name"`
 	MaxLevel      int32              `bson:"max_level" json:"max_level"`
 	BaseCost      float64            `bson:"base_cost" json:"base_cost"`
 	Description   string             `bson:"description" json:"description"`
