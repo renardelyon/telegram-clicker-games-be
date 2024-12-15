@@ -3,6 +3,7 @@ package config
 type Config struct {
 	Application         ApplicationConfig
 	ClickerGameDatabase DBConfig
+	Telegram            TelegramConfig
 }
 
 type ApplicationConfig struct {
@@ -16,4 +17,9 @@ type DBConfig struct {
 	User     string
 	Password string
 	Database string
+}
+
+type TelegramConfig struct {
+	BotToken        string
+	ChannelUsername string
 }

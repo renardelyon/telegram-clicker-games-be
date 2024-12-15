@@ -22,6 +22,7 @@ type UsecaseInterface interface {
 	GetUserById(ctx context.Context) (users model.Users, err error)
 	UpsertUser(ctx context.Context) (err error)
 	UpdateEnergyBasedOnTime(ctx context.Context) (err error)
+	CheckMembershipTelegram(ctx context.Context) (result bool, err error)
 }
 
 func NewUsecase(authRepo auth_repo.RepoInterface, gameplayRepo gameplay_repo.RepoInterface, logger *logrus.Logger) (UsecaseInterface, error) {

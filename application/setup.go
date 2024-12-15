@@ -5,7 +5,9 @@ import (
 	"errors"
 	"telegram-clicker-game-be/config"
 	lib_mongo "telegram-clicker-game-be/pkg/db/mongo"
+	"time"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -34,6 +36,7 @@ func Setup(cfg *config.Config, c *cli.Context) (*Application, error) {
 	if err := runInit(
 		initLogger(),
 		initDatabase(cfg),
+		initHttpClient(),
 	)(app); err != nil {
 		return app, err
 	}
@@ -70,6 +73,21 @@ func runInit(appFuncs ...func(*Application) error) func(*Application) error {
 // 		return nil
 // 	}
 // }
+
+func initHttpClient() func(*Application) error {
+	return func(app *Application) error {
+		httpClient := resty.New()
+
+		httpClient.EnableTrace().
+			SetRetryCount(3).
+			SetRetryWaitTime(1 * time.Second).
+			SetRetryMaxWaitTime(10 * time.Second)
+
+		app.HttpClient = httpClient
+
+		return nil
+	}
+}
 
 func initLogger() func(*Application) error {
 	return func(app *Application) error {

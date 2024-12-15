@@ -15,6 +15,7 @@ type Handler interface {
 	GetUserById(c *gin.Context)
 	SignIn(c *gin.Context)
 	UpdateEnergyBasedOnTime(c *gin.Context)
+	CheckMembershipTelegram(c *gin.Context)
 }
 
 func NewHandler(usecase usecase.UsecaseInterface) Handler {

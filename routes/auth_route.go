@@ -1,6 +1,7 @@
 package route
 
 import (
+	"telegram-clicker-game-be/config"
 	user_auth_handler "telegram-clicker-game-be/domain/auth-user/handler"
 	user_auth_repo "telegram-clicker-game-be/domain/auth-user/repositories"
 	user_auth_usecase "telegram-clicker-game-be/domain/auth-user/usecase"
@@ -8,6 +9,7 @@ import (
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-resty/resty/v2"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,10 +19,12 @@ func SetupAuthRoute(
 	dbMongo *mongo.Database,
 	dbClient *mongo.Client,
 	r *gin.Engine,
-	apiRoute *gin.RouterGroup) error {
+	apiRoute *gin.RouterGroup,
+	cfg *config.Config,
+	httpClient *resty.Client) error {
 	// ROUTING
 
-	authRepo, err := user_auth_repo.NewRepo(dbMongo, logger)
+	authRepo, err := user_auth_repo.NewRepo(dbMongo, logger, cfg, httpClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
@@ -42,6 +46,7 @@ func SetupAuthRoute(
 		authGroup := v1.Group("/auth")
 		authGroup.GET("/profile", handler.UpdateEnergyBasedOnTime, handler.GetUserById)
 		authGroup.POST("/sign-in", handler.SignIn)
+		authGroup.GET("/telegram/check", handler.CheckMembershipTelegram)
 	}
 
 	return nil

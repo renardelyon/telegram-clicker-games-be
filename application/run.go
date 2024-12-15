@@ -43,7 +43,7 @@ func runApp(cfg *config.Config, app *Application) error {
 
 	apiRoute := r.Group("/api")
 
-	if err := route.SetupAuthRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
+	if err := route.SetupAuthRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, cfg, app.HttpClient); err != nil {
 		return err
 	}
 

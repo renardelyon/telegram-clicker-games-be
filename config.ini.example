@@ -3,8 +3,12 @@ ServiceName="telegram-clicker"
 ServiceVersion="1.0.0"
 ServerPort=10018
 
-[ArticleDatabase]
+[ClickerGameDatabase]
 Host="localhost"
 User="root"
 Password="<password>"
 Database="db_name"
+
+[Telegram]
+BotToken="abcd"
+ChannelUsername=""
