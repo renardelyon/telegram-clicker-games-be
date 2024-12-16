@@ -15,15 +15,11 @@ func SetupLeaderboardRoute(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
 	r *gin.Engine,
-	apiRoute *gin.RouterGroup) error {
+	apiRoute *gin.RouterGroup,
+	leaderboardRepo leaderboard_repo.RepoInterface) error {
 	// ROUTING
 
-	repo, err := leaderboard_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	usecase, err := leaderboard_usecase.NewUsecase(repo, logger)
+	usecase, err := leaderboard_usecase.NewUsecase(leaderboardRepo, logger)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

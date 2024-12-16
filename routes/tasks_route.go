@@ -17,20 +17,13 @@ func SetupTasksRoute(
 	dbMongo *mongo.Database,
 	dbClient *mongo.Client,
 	r *gin.Engine,
-	apiRoute *gin.RouterGroup) error {
+	apiRoute *gin.RouterGroup,
+	taskRepo tasks_repo.RepoInterface,
+	gameplayRepo gameplay_repo.RepoInterface,
+) error {
 	// ROUTING
 
-	repo, err := tasks_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	gRepo, err := gameplay_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	usecase, err := tasks_usecase.NewUsecase(repo, logger, gRepo, dbClient)
+	usecase, err := tasks_usecase.NewUsecase(taskRepo, logger, gameplayRepo, dbClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

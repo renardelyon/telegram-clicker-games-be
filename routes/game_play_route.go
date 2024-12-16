@@ -16,15 +16,12 @@ func SetupGameplayRoute(
 	dbMongo *mongo.Database,
 	dbClient *mongo.Client,
 	r *gin.Engine,
-	apiRoute *gin.RouterGroup) error {
+	apiRoute *gin.RouterGroup,
+	gameplayRepo gameplay_repo.RepoInterface,
+) error {
 	// ROUTING
 
-	repo, err := gameplay_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	usecase, err := gameplay_usecase.NewUsecase(repo, logger, dbClient)
+	usecase, err := gameplay_usecase.NewUsecase(gameplayRepo, logger, dbClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

@@ -3,6 +3,11 @@ package application
 import (
 	"fmt"
 	"telegram-clicker-game-be/config"
+	auth_repo "telegram-clicker-game-be/domain/auth-user/repositories"
+	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
+	leaderboard_repo "telegram-clicker-game-be/domain/leaderboard/repositories"
+	referral_repo "telegram-clicker-game-be/domain/referral/repositories"
+	task_repo "telegram-clicker-game-be/domain/tasks/repositories"
 	"telegram-clicker-game-be/middleware"
 	route "telegram-clicker-game-be/routes"
 
@@ -37,29 +42,51 @@ func runApp(cfg *config.Config, app *Application) error {
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
 
-	if err := middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r); err != nil {
+	// REPO
+	authRepo, err := auth_repo.NewRepo(app.DBDatabase, app.Logger, cfg, app.HttpClient)
+	if err != nil {
+		return err
+	}
+	gameplayRepo, err := gameplay_repo.NewRepo(app.DBDatabase, app.Logger)
+	if err != nil {
+		return err
+	}
+	leaderboardRepo, err := leaderboard_repo.NewRepo(app.DBDatabase, app.Logger)
+	if err != nil {
+		return err
+	}
+	referralRepo, err := referral_repo.NewRepo(app.DBDatabase, app.Logger)
+	if err != nil {
+		return err
+	}
+	taskRepo, err := task_repo.NewRepo(app.DBDatabase, app.Logger)
+	if err != nil {
+		return err
+	}
+
+	if err := middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r, authRepo, gameplayRepo); err != nil {
 		return err
 	}
 
 	apiRoute := r.Group("/api")
 
-	if err := route.SetupAuthRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, cfg, app.HttpClient); err != nil {
+	if err := route.SetupAuthRoute(app.Logger, app.DBDatabase, r, apiRoute, cfg, authRepo, gameplayRepo); err != nil {
 		return err
 	}
 
-	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
+	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, gameplayRepo); err != nil {
 		return err
 	}
 
-	if err := route.SetupLeaderboardRoute(app.Logger, app.DBDatabase, r, apiRoute); err != nil {
+	if err := route.SetupLeaderboardRoute(app.Logger, app.DBDatabase, r, apiRoute, leaderboardRepo); err != nil {
 		return err
 	}
 
-	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
+	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, taskRepo, gameplayRepo); err != nil {
 		return err
 	}
 
-	if err := route.SetupReferralRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute); err != nil {
+	if err := route.SetupReferralRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, referralRepo); err != nil {
 		return err
 	}
 

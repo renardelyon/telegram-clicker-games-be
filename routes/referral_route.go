@@ -16,15 +16,11 @@ func SetupReferralRoute(
 	dbMongo *mongo.Database,
 	dbClient *mongo.Client,
 	r *gin.Engine,
-	apiRoute *gin.RouterGroup) error {
+	apiRoute *gin.RouterGroup,
+	referralRepo referral_repo.RepoInterface) error {
 	// ROUTING
 
-	repo, err := referral_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	usecase, err := referral_usecase.NewUsecase(repo, logger, dbClient)
+	usecase, err := referral_usecase.NewUsecase(referralRepo, logger, dbClient)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

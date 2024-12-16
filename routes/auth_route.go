@@ -9,7 +9,6 @@ import (
 	"telegram-clicker-game-be/pkg/error_utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-resty/resty/v2"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,22 +16,13 @@ import (
 func SetupAuthRoute(
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
-	dbClient *mongo.Client,
 	r *gin.Engine,
 	apiRoute *gin.RouterGroup,
 	cfg *config.Config,
-	httpClient *resty.Client) error {
+	authRepo user_auth_repo.RepoInterface,
+	gameplayRepo gameplay_repo.RepoInterface,
+) error {
 	// ROUTING
-
-	authRepo, err := user_auth_repo.NewRepo(dbMongo, logger, cfg, httpClient)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
-
-	gameplayRepo, err := gameplay_repo.NewRepo(dbMongo, logger)
-	if err != nil {
-		return error_utils.HandleError(err)
-	}
 
 	usecase, err := user_auth_usecase.NewUsecase(authRepo, gameplayRepo, logger)
 	if err != nil {
