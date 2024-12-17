@@ -64,10 +64,28 @@ func (u *usecase) RedeemTaskReward(ctx context.Context, taskId string, status co
 		return
 	}
 
-	gs.Balance += float64(tm.RewardAmount)
-	gs.TotalBalance += float64(tm.RewardAmount)
-
 	operation := func(mctx mongo.SessionContext) (res interface{}, err error) {
+		taskDesc := constant.TaskDesc(tm.Description)
+
+		var reward = tm.RewardAmount
+		if taskDesc.IsValid() && taskDesc == constant.INVITE_FRIENDS {
+			referral, err := u.referralRepo.GetReferralByUserId(mctx, int(userInfo.ID))
+			if err != nil {
+				errTrace = error_utils.HandleError(err)
+				return res, err
+			}
+
+			reward = tm.RewardAmount * float32(referral.NewUserReferred)
+
+			err = u.referralRepo.ResetNewUserReferred(mctx, int(userInfo.ID))
+			if err != nil {
+				errTrace = error_utils.HandleError(err)
+				return res, err
+			}
+		}
+
+		gs.Balance += float64(reward)
+		gs.TotalBalance += float64(reward)
 		// Update Balance and total balance from from reward amount
 		err = u.gameplayRepo.UpdateBalanceGameState(mctx, int(userInfo.ID), gs)
 		if err != nil {

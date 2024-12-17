@@ -4,6 +4,7 @@ import (
 	"context"
 	"telegram-clicker-game-be/constant"
 	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
+	referral_repo "telegram-clicker-game-be/domain/referral/repositories"
 	"telegram-clicker-game-be/domain/tasks/model"
 	task_repo "telegram-clicker-game-be/domain/tasks/repositories"
 	"telegram-clicker-game-be/pkg/utils"
@@ -15,8 +16,10 @@ import (
 type usecase struct {
 	taskRepo     task_repo.RepoInterface
 	gameplayRepo gameplay_repo.RepoInterface
-	logger       *logrus.Logger
-	dbClient     *mongo.Client
+	referralRepo referral_repo.RepoInterface
+
+	logger   *logrus.Logger
+	dbClient *mongo.Client
 }
 
 type UsecaseInterface interface {
@@ -24,7 +27,7 @@ type UsecaseInterface interface {
 	RedeemTaskReward(ctx context.Context, taskId string, status constant.TaskStatus) (err error)
 }
 
-func NewUsecase(taskRepo task_repo.RepoInterface, logger *logrus.Logger, gameplayRepo gameplay_repo.RepoInterface, dbClient *mongo.Client) (UsecaseInterface, error) {
+func NewUsecase(taskRepo task_repo.RepoInterface, logger *logrus.Logger, gameplayRepo gameplay_repo.RepoInterface, dbClient *mongo.Client, referralRepo referral_repo.RepoInterface) (UsecaseInterface, error) {
 	if err := utils.ExpectPointer(taskRepo, gameplayRepo); err != nil {
 		return nil, err
 	}
@@ -34,5 +37,6 @@ func NewUsecase(taskRepo task_repo.RepoInterface, logger *logrus.Logger, gamepla
 		dbClient:     dbClient,
 		taskRepo:     taskRepo,
 		logger:       logger,
+		referralRepo: referralRepo,
 	}, nil
 }

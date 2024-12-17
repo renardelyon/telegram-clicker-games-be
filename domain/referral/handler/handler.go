@@ -13,6 +13,7 @@ type handler struct {
 type Handler interface {
 	GetReferrals(c *gin.Context)
 	AddReferrals(c *gin.Context)
+	GetMyReferral(c *gin.Context)
 }
 
 func NewHandler(usecase usecase.UsecaseInterface) Handler {

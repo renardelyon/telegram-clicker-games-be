@@ -2,6 +2,7 @@ package route
 
 import (
 	gameplay_repo "telegram-clicker-game-be/domain/game_play/repositories"
+	referral_repo "telegram-clicker-game-be/domain/referral/repositories"
 	tasks_handler "telegram-clicker-game-be/domain/tasks/handler"
 	tasks_repo "telegram-clicker-game-be/domain/tasks/repositories"
 	tasks_usecase "telegram-clicker-game-be/domain/tasks/usecase"
@@ -20,10 +21,11 @@ func SetupTasksRoute(
 	apiRoute *gin.RouterGroup,
 	taskRepo tasks_repo.RepoInterface,
 	gameplayRepo gameplay_repo.RepoInterface,
+	referralRepo referral_repo.RepoInterface,
 ) error {
 	// ROUTING
 
-	usecase, err := tasks_usecase.NewUsecase(taskRepo, logger, gameplayRepo, dbClient)
+	usecase, err := tasks_usecase.NewUsecase(taskRepo, logger, gameplayRepo, dbClient, referralRepo)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

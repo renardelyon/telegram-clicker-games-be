@@ -35,8 +35,9 @@ type GameState struct {
 }
 
 type Referral struct {
-	ReferredBy *int  `bson:"referred_by" json:"referred_by"` // telegram_id
-	Referrals  []int `bson:"referrals" json:"referrals"`
+	NewUserReferred int   `bson:"new_user_referred" json:"new_user_referred"` // telegram_id
+	ReferredBy      *int  `bson:"referred_by" json:"referred_by"`             // telegram_id
+	Referrals       []int `bson:"referrals" json:"referrals"`
 }
 
 type Upgrade struct {

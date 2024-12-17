@@ -19,6 +19,7 @@ type usecase struct {
 type UsecaseInterface interface {
 	GetReferrals(ctx context.Context) (res []model.User, err error)
 	AddReferrals(ctx context.Context, referred_by int) (err error)
+	GetMyReferral(ctx context.Context) (res model.Referral, err error)
 }
 
 func NewUsecase(referralRepo referral_repo.RepoInterface, logger *logrus.Logger, dbClient *mongo.Client) (UsecaseInterface, error) {

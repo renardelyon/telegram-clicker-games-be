@@ -17,6 +17,7 @@ type User struct {
 }
 
 type Referral struct {
-	ReferredBy int   `bson:"referred_by"` // telegram_id
-	Referrals  []int `bson:"referrals"`
+	NewUserReferred int   `bson:"new_user_referred" json:"new_user_referred"`
+	ReferredBy      int   `bson:"referred_by" json:"referred_by"` // telegram_id
+	Referrals       []int `bson:"referrals" json:"referrals"`
 }

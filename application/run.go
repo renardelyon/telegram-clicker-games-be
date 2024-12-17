@@ -82,7 +82,7 @@ func runApp(cfg *config.Config, app *Application) error {
 		return err
 	}
 
-	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, taskRepo, gameplayRepo); err != nil {
+	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, taskRepo, gameplayRepo, referralRepo); err != nil {
 		return err
 	}
 

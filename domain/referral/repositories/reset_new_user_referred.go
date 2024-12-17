@@ -9,12 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (r *repo) AddReferral(ctx context.Context, userId int, referrerId int) (err error) {
+func (r *repo) ResetNewUserReferred(ctx context.Context, userId int) (err error) {
 	r.logger.WithFields(logrus.Fields{
 		"request_id": ctx.Value("request_id"),
 		"userId":     userId,
-		"referrerId": referrerId,
-	}).Info("Repo: AddReferral")
+	}).Info("Repo: ResetNewUserReferred")
 
 	var errTrace error
 	defer error_utils.HandleErrorLog(&errTrace, r.logger)
@@ -23,18 +22,13 @@ func (r *repo) AddReferral(ctx context.Context, userId int, referrerId int) (err
 
 	coll := r.dbMongo.Collection("Users")
 
-	filter := bson.M{"telegram_id": referrerId}
+	filter := bson.M{"telegram_id": userId}
 
 	// Update data
 	update := bson.M{
 		"$set": bson.M{
-			"updated_at": now,
-		},
-		"$push": bson.M{
-			"referral.referrals": userId,
-		},
-		"$inc": bson.M{
-			"new_user_referred": 1, // Increment 'someField' by 1
+			"updated_at":        now,
+			"new_user_referred": 0,
 		},
 	}
 
