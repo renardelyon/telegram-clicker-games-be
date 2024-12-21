@@ -43,6 +43,19 @@ func Setup(cfg *config.Config, c *cli.Context) (*Application, error) {
 	return app, nil
 }
 
+func SetupVercel(cfg *config.Config) (*Application, error) {
+	app := new(Application)
+
+	if err := runInit(
+		initLogger(),
+		initDatabase(cfg),
+		initHttpClient(),
+	)(app); err != nil {
+		return app, err
+	}
+	return app, nil
+}
+
 func runInit(appFuncs ...func(*Application) error) func(*Application) error {
 	return func(app *Application) error {
 		app.Context = context.Background()

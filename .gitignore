@@ -23,4 +23,6 @@ go.work
 go.sum
 
 # config file
+.env
 config.ini
+.vercel

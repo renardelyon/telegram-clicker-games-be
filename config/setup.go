@@ -1,16 +1,23 @@
 package config
 
 import (
-	gcfgv1 "gopkg.in/gcfg.v1"
+	"log"
+
+	"github.com/caarlos0/env/v11"
+	"github.com/joho/godotenv"
 )
 
 func Setup() (*Config, error) {
-	cfgFile := "config.ini"
-	cfg := &Config{}
-	err := gcfgv1.FatalOnly(gcfgv1.ReadFileInto(cfg, cfgFile))
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Warning: Could not load .env file, continuing with system environment variables")
+	}
+
+	var cfg Config
+	err = env.Parse(&cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	return cfg, nil
+	return &cfg, nil
 }

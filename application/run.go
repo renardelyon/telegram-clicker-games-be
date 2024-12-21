@@ -33,7 +33,7 @@ func (app *Application) Run(cfg *config.Config) error {
 // 	return app.MigrationRunner.Up()
 // }
 
-func runApp(cfg *config.Config, app *Application) error {
+func SetupGin(app *Application, cfg *config.Config) (rGin *gin.Engine, err error) {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
@@ -45,48 +45,57 @@ func runApp(cfg *config.Config, app *Application) error {
 	// REPO
 	authRepo, err := auth_repo.NewRepo(app.DBDatabase, app.Logger, cfg, app.HttpClient)
 	if err != nil {
-		return err
+		return
 	}
 	gameplayRepo, err := gameplay_repo.NewRepo(app.DBDatabase, app.Logger)
 	if err != nil {
-		return err
+		return
 	}
 	leaderboardRepo, err := leaderboard_repo.NewRepo(app.DBDatabase, app.Logger)
 	if err != nil {
-		return err
+		return
 	}
 	referralRepo, err := referral_repo.NewRepo(app.DBDatabase, app.Logger)
 	if err != nil {
-		return err
+		return
 	}
 	taskRepo, err := task_repo.NewRepo(app.DBDatabase, app.Logger)
 	if err != nil {
-		return err
+		return
 	}
 
-	if err := middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r, authRepo, gameplayRepo); err != nil {
-		return err
+	if err = middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r, authRepo, gameplayRepo); err != nil {
+		return
 	}
 
 	apiRoute := r.Group("/api")
 
-	if err := route.SetupAuthRoute(app.Logger, app.DBDatabase, r, apiRoute, cfg, authRepo, gameplayRepo); err != nil {
-		return err
+	if err = route.SetupAuthRoute(app.Logger, app.DBDatabase, r, apiRoute, cfg, authRepo, gameplayRepo); err != nil {
+		return
 	}
 
-	if err := route.SetupGameplayRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, gameplayRepo); err != nil {
-		return err
+	if err = route.SetupGameplayRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, gameplayRepo); err != nil {
+		return
 	}
 
-	if err := route.SetupLeaderboardRoute(app.Logger, app.DBDatabase, r, apiRoute, leaderboardRepo); err != nil {
-		return err
+	if err = route.SetupLeaderboardRoute(app.Logger, app.DBDatabase, r, apiRoute, leaderboardRepo); err != nil {
+		return
 	}
 
-	if err := route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, taskRepo, gameplayRepo, referralRepo); err != nil {
-		return err
+	if err = route.SetupTasksRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, taskRepo, gameplayRepo, referralRepo); err != nil {
+		return
 	}
 
-	if err := route.SetupReferralRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, referralRepo); err != nil {
+	if err = route.SetupReferralRoute(app.Logger, app.DBDatabase, app.DBClient, r, apiRoute, referralRepo); err != nil {
+		return
+	}
+
+	return r, err
+}
+
+func runApp(cfg *config.Config, app *Application) error {
+	r, err := SetupGin(app, cfg)
+	if err != nil {
 		return err
 	}
 
