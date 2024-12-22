@@ -64,7 +64,7 @@ func SetupGin(app *Application, cfg *config.Config) (rGin *gin.Engine, err error
 		return
 	}
 
-	if err = middleware.SetupAuthMiddleware(app.Logger, app.DBDatabase, r, authRepo, gameplayRepo); err != nil {
+	if err = middleware.SetupAuthMiddleware(cfg, app.Logger, app.DBDatabase, r, authRepo, gameplayRepo); err != nil {
 		return
 	}
 

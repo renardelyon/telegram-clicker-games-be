@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"telegram-clicker-game-be/config"
 	"telegram-clicker-game-be/domain/auth-user/handler"
 	auth_repo "telegram-clicker-game-be/domain/auth-user/repositories"
 	auth_usecase "telegram-clicker-game-be/domain/auth-user/usecase"
@@ -13,6 +14,7 @@ import (
 )
 
 func SetupAuthMiddleware(
+	cfg *config.Config,
 	logger *logrus.Logger,
 	dbMongo *mongo.Database,
 	r *gin.Engine,
@@ -21,7 +23,7 @@ func SetupAuthMiddleware(
 ) error {
 	// ROUTING
 
-	usecase, err := auth_usecase.NewUsecase(authRepo, gameplayRepo, logger)
+	usecase, err := auth_usecase.NewUsecase(authRepo, gameplayRepo, logger, cfg)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}

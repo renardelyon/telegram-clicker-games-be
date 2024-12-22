@@ -24,7 +24,7 @@ func SetupAuthRoute(
 ) error {
 	// ROUTING
 
-	usecase, err := user_auth_usecase.NewUsecase(authRepo, gameplayRepo, logger)
+	usecase, err := user_auth_usecase.NewUsecase(authRepo, gameplayRepo, logger, cfg)
 	if err != nil {
 		return error_utils.HandleError(err)
 	}
