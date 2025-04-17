@@ -22,4 +22,5 @@ type DBConfig struct {
 type TelegramConfig struct {
 	BotToken        string `env:"BOT_TOKEN,required"`
 	ChannelUsername string `env:"CHANNEL_USERNAME,required"`
+	BotApp          string `env:"BOT_APP,required"`
 }

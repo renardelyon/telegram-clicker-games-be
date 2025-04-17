@@ -12,6 +12,7 @@ require (
 	github.com/telegram-mini-apps/init-data-golang v1.1.5
 	github.com/urfave/cli v1.22.15
 	go.mongodb.org/mongo-driver v1.17.1
+	golang.org/x/tools/go/pointer v0.1.0-deprecated
 )
 
 require (
@@ -49,6 +50,7 @@ require (
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
