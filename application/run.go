@@ -37,15 +37,10 @@ func SetupGin(app *Application, cfg *config.Config) (rGin *gin.Engine, err error
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
+	r.Use(CORSMiddleware())
 	r.Use(RequestIDMiddleware(app))
 	r.Use(gin.Recovery())
 	r.Use(gin.ErrorLogger())
-
-	if err = route.SetupWalletRoute(cfg, app.Logger, r); err != nil {
-		return
-	}
-
-	r.Use(CORSMiddleware())
 
 	// REPO
 	authRepo, err := auth_repo.NewRepo(app.DBDatabase, app.Logger, cfg, app.HttpClient)
