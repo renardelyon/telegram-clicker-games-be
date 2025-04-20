@@ -18,7 +18,7 @@ func (u *usecase) ValidateAndBindUserInfo(ctx context.Context, telData string) (
 	var errTrace error
 	defer error_utils.HandleErrorLog(&errTrace, u.logger)
 
-	err = initdata.Validate(telData, u.cfg.Telegram.BotToken, 1*time.Hour)
+	err = initdata.Validate(telData, u.cfg.Telegram.BotToken, 10*time.Hour)
 	if err != nil {
 		errTrace = error_utils.HandleError(err)
 		return

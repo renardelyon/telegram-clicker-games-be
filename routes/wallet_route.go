@@ -28,7 +28,7 @@ func SetupWalletRoute(
 	{
 		group.GET("/onConnect", handler.RedirectWalletOnConnect)
 		group.GET("/onDisconnect", handler.RedirectWalletOnDisconnect)
-		group.GET("/signTransaction", handler.RedirectWalletOnDisconnect)
+		group.GET("/signTransaction", handler.RedirectWalletSignTransaction)
 	}
 
 	return nil
