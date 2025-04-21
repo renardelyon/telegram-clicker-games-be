@@ -1,15 +1,19 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "/api/index.go",
-        "use": "@vercel/go"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "api/index.go"
-      }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "/api/index.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.go"
+    },
+    {
+      "src": "/wallets/(.*)",
+      "dest": "api/index.go"
+    }
+  ]
+}
